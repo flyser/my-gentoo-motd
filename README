@@ -1,0 +1,8 @@
+
+== Installation ==
+
+1. Copy the etc-motd.d to /etc/motd.d
+2. Remote /etc/motd and create a symlink from /run/motd to /etc/motd
+3. Copy update-motd /usr/local/sbin/update-motd
+4. Add a cronjob to run /usr/local/sbin/update-motd every 10 minutes or whatever you prefer
+5. Make sure the files /tmp/motd-* are deleted after you installed, upgraded or removed packages (or in regular intervals)

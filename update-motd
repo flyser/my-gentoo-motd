@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Configure this to run between once every minute and once every five.
+
+if [[ "x$1" = "x-f" ]]; then
+  rm /tmp/.motd-* 2>/dev/null
+elif [[ $# -gt 0 ]]; then
+  echo -e "Usage:\n  $0 [-f]"
+  exit 0
+fi
+
+cd /etc/motd.d || exit 1
+
+TMPMOTD="$(mktemp --tmpdir=/tmp motd.XXXXXXXXXX)"
+trap "rm \"${TMPMOTD}\"; exit 1" 2
+
+for SCRIPT in *; do
+    [[ -x ./"${SCRIPT}" ]] || continue
+
+    ./"${SCRIPT}" >> "${TMPMOTD}"
+done
+
+mv "${TMPMOTD}" /run/motd
+rm -f "$TMPMOTD"
